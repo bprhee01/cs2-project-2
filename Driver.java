@@ -1,12 +1,17 @@
 public class Driver implements Comparable<Driver> {
     private String name;
     private double area;
-    public static String comparisonVar = "name"; 
+    private static String comparisonVar = "name"; 
 
     // Constructors
-    public Driver() {}
+    public Driver() {
+        this.name = "";
+        this.area = 0.0;
+
+    }
     public Driver(String name){
         this.name = name;
+        this.area = 0.0;
     }
 
     // Accessors
@@ -36,6 +41,6 @@ public class Driver implements Comparable<Driver> {
 
     // toString method
     public String toString(){
-        return name + "\t" + area;
+        return "Driver: [Name: " + name + ", Area: " + area + "]";
     }
 }
