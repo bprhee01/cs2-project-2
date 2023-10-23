@@ -1,3 +1,6 @@
+package Driver;
+//Ben Rhee
+//bpr210000
 public class Driver implements Comparable<Driver> {
     private String name;
     private double area;
@@ -41,6 +44,6 @@ public class Driver implements Comparable<Driver> {
 
     // toString method
     public String toString(){
-        return "Driver: [Name: " + name + ", Area: " + area + "]";
+        return name + "\t" + String.format("%.2f", area);
     }
 }

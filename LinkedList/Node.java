@@ -1,4 +1,7 @@
-public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
+package LinkedList;
+//Ben Rhee
+//bpr210000
+public class Node<T> implements Comparable<Node<T>> {
     private T payload;
     private Node<T> next;
     private Node<T> previous;
@@ -53,7 +56,7 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
         } else if (other.payload == null) {
             return 1;
         } else {
-            return this.payload.compareTo(other.payload);
+            return 0;
         }
     }
 
