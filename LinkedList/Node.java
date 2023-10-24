@@ -22,15 +22,15 @@ public class Node<T> implements Comparable<Node<T>> {
 
     // Accessors
     public Node<T> getNext() {
-        return next;
+        return this.next;
     }
 
     public Node<T> getPrevious() {
-        return previous;
+        return this.previous;
     }
 
     public T getPayload() {
-        return payload;
+        return this.payload;
     }
 
     // Mutators

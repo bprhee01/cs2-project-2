@@ -18,25 +18,25 @@ public class LinkedList<T extends Comparable<T>> {
     }
 
     // Accessors
-    public Node<T> getHead() {
-        return head;
+    public Node<T> getHead(){
+        return this.head;
     }
 
-    public Node<T> getTail() {
-        return tail;
+    public Node<T> getTail(){
+        return this.tail;
     }
 
     // Mutators
-    public void setHead(Node<T> node) {
+    public void setHead(Node<T> node){
         head = node;
     }
 
-    public void setTail(Node<T> node) {
+    public void setTail(Node<T> node){
         tail = node;
     }
 
     // Add Method
-    public void add(Node<T> node) {
+    public void add(Node<T> node){
         if (tail != null) {
             tail.setNext(node);
             node.setPrevious(tail);
@@ -47,7 +47,7 @@ public class LinkedList<T extends Comparable<T>> {
         }
     }
 
-    // toString
+    // toString Method
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -69,8 +69,9 @@ public class LinkedList<T extends Comparable<T>> {
 
      */
     public void sort() {
+        // Already sorted or empty list
         if (head == null || head.getNext() == null) {
-            return; // Already sorted or empty list
+            return; 
         }
   
         Node<T> current = head;

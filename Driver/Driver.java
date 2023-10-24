@@ -1,17 +1,19 @@
 package Driver;
 //Ben Rhee
 //bpr210000
-public class Driver implements Comparable<Driver> {
+public class Driver implements Comparable<Driver>{
     private String name;
     private double area;
-    private static String comparisonVar = "name"; 
+    public static String comparisonVar = "name"; 
 
-    // Constructors
-    public Driver() {
+    // Default Constructor
+    public Driver(){
         this.name = "";
         this.area = 0.0;
 
     }
+
+    // Overloaded Constructor
     public Driver(String name){
         this.name = name;
         this.area = 0.0;
@@ -32,9 +34,9 @@ public class Driver implements Comparable<Driver> {
     public void setArea(double area){
         this.area = area;
     }
-
+    
     // CompareTo 
-    public int compareTo(Driver other) {
+    public int compareTo(Driver other){
         if (comparisonVar.equals("name")) {
             return this.name.compareTo(other.name);
         } else {

@@ -25,7 +25,7 @@ public class Main {
     public static void main(String[] args){
 
         //intiializing data structures for coordinates, driver, and indiced based off rubric
-        LinkedList driverList = new LinkedList();
+        LinkedList<Driver> driverList = new LinkedList();
         int numDrivers = 0;
 
         Scanner scanner = new Scanner(System.in);
@@ -59,17 +59,18 @@ public class Main {
                     if(commandString.length != 3){
                         continue;
                     }
-                    driverList.sort();
                     if(commandString[1] == "area"){
+                        Driver.comparisonVar = "area";
+                        driverList.sort();
                         if (commandString[2] == "asc"){
-                            Node curr = driverList.getHead();
+                            Node<Driver> curr = driverList.getHead();
                             while (curr !=  null){
                                 System.out.println(curr.getPayload().toString());
                                 curr = curr.getNext();
                             }
                         }
                         else if(commandString[2] == "des"){
-                            Node curr = driverList.getTail();
+                            Node<Driver> curr = driverList.getTail();
                             while (curr !=  null){
                                 System.out.println(curr.getPayload().toString());
                                 curr = curr.getPrevious();
@@ -77,15 +78,17 @@ public class Main {
                         }
                     }
                     else if(commandString[1] == "driver"){
+                        Driver.comparisonVar = "name";
+                        driverList.sort();
                         if (commandString[2] == "asc"){
-                            Node curr = driverList.getHead();
+                            Node<Driver> curr = driverList.getHead();
                             while (curr !=  null){
                                 System.out.println(curr.getPayload().toString());
                                 curr = curr.getNext();
                             }
                         }
                         else if(commandString[2] == "des"){
-                            Node curr = driverList.getTail();
+                            Node<Driver> curr = driverList.getTail();
                             while (curr !=  null){
                                 System.out.println(curr.getPayload().toString());
                                 curr = curr.getPrevious();
@@ -100,9 +103,10 @@ public class Main {
                     for (int i = 0; i < commandString.length; i += 1){
                         name += commandString[i];
                     }
-                    Node curr = driverList.getHead();
+                    Node<Driver> curr = driverList.getHead();
                     while(curr !=  null){
-                        String currName = curr.getPayload().getName();
+                        Driver driver = curr.getPayload();
+                        String currName = driver.getName();
                         if (currName == name){
                             System.out.println(curr.getPayload().toString());
                             System.out.println();
@@ -118,7 +122,7 @@ public class Main {
                 else{
                    //search the number
                    double area = Double.parseDouble(commandString[0]) ;
-                   Node curr = driverList.getHead();
+                   Node<Driver> curr = driverList.getHead();
                     while(curr !=  null){
                         double currArea = curr.getPayload().getArea();
                         if (currArea == area){
@@ -145,7 +149,7 @@ public class Main {
         }
     }
 
-    public static void addDriver(String inputString[], LinkedList driverList){
+    public static void addDriver(String inputString[], LinkedList<Driver> driverList){
         int firstCoordIdx = 0;
         String name = "";
         int numCoords = 0;
@@ -178,7 +182,7 @@ public class Main {
         String printString = name + "\t" + String.format("%.2f", area);
         System.out.println(printString);
         //Setting Node
-        Node driverNode = new Node(driver);
+        Node<Driver> driverNode = new Node(driver);
         //Adding driver to Linked List
         driverList.add(driverNode);
 
