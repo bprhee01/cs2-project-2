@@ -43,55 +43,59 @@ public class Main {
                 addDriver(driverInputString, driverList);
                 numDrivers += 1;
             }
+            String driverListString = driverList.toString();
+            System.out.println(driverListString);
             inputFile.close();
 
             //Part 2, Executing instruction commands given by the user
             System.out.print("Enter file name: " );
             String fileNameTwo = scanner.nextLine();
             Scanner commandInputFile = new Scanner(new File(fileNameTwo));
-            
+
             //Iterate through each command
             while (commandInputFile.hasNext()) {
                 String commandString[] = getStringArray(commandInputFile.nextLine());
 
                 //command for sorting
-                if (commandString[0] == "sort"){
-
+                if (commandString[0].equals("sort")){
+    
                     //case where command isnt valid
                     if(commandString.length != 3) {
                         continue;
                     }
-
+            
                     //sorting criteria
-                    if (commandString[1] == "area") {
+                    if (commandString[1].equals("area")) {
                         Driver.comparisonVar = "area";
                     }
-                    else if(commandString[1] == "driver") {
+                    else if(commandString[1].equals("driver")) {
                         Driver.comparisonVar = "name";
                     }
                     else{
                         continue;
                     }
                     driverList.sort();
-
                     //sorting direction
-                    if  (commandString[2] == "asc") {
+                    if  (commandString[2].equals("asc")) {
                         Node<Driver> curr = driverList.getHead();
                             while (curr !=  null){
                                 System.out.println(curr.getPayload().toString());
                                 curr = curr.getNext();
                             }
+                            System.out.println();
                     }
-                    else if (commandString[2] == "des") {
+                    else if (commandString[2].equals("des")) {
                         Node<Driver> curr = driverList.getTail();
                         while (curr !=  null){
                             System.out.println(curr.getPayload().toString());
                             curr = curr.getPrevious();
                         }
+                        System.out.println();
                     }
                     else {
                         continue;
                     }
+                    
                 }
 
                 //command asking for a specifc area
@@ -107,7 +111,7 @@ public class Main {
                         else{
                             curr = curr.getNext();
                         }
-                        System.out.println(targetArea + " not found");
+                        System.out.println(commandString[0] + " not found");
                         System.out.println();
                     }
                 }
@@ -119,7 +123,7 @@ public class Main {
                     while(curr !=  null){
                         Driver driver = curr.getPayload();
                         String currName = driver.getName();
-                        if (currName == targetName){
+                        if (currName.equals(targetName)){
                             System.out.println(curr.getPayload().toString());
                             System.out.println();
                             break;
@@ -140,7 +144,7 @@ public class Main {
 
         }
 
-      
+
     }
 
     public static void addDriver(String inputString[], LinkedList<Driver> driverList){
@@ -173,8 +177,7 @@ public class Main {
         //setting driver
         Driver driver = new Driver(name);
         driver.setArea(area);
-        String printString = name + "\t" + String.format("%.2f", area);
-        System.out.println(printString);
+
         //Setting Node
         Node<Driver> driverNode = new Node(driver);
         //Adding driver to Linked List
