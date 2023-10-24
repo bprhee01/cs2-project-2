@@ -1,6 +1,6 @@
 //Ben Rhee
 //bpr210000
-// Still need pseudocode
+
 /*
  * The main function first handles obtaining an input file containing driver info
  * if not found, main throw an exception
@@ -14,7 +14,8 @@
 
 import java.io.*;
 import java.util.*;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import LinkedList.Node;
 import LinkedList.LinkedList;
@@ -24,15 +25,18 @@ public class Main {
 
     public static void main(String[] args){
 
-        //intiializing data structures for coordinates, driver, and indiced based off rubric
+        //intiializing Driver Linked List
         LinkedList<Driver> driverList = new LinkedList();
         int numDrivers = 0;
 
+        // Requesting driver info from user
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter file name: " );
         String fileName = scanner.nextLine();
 
         try {
+
+            //Part 1, Adding Driver Info to the List and Printing results
             Scanner inputFile = new Scanner(new File(fileName));
             while(inputFile.hasNext()){
                 String driverInputString[] = getStringArray(inputFile.nextLine());
@@ -40,74 +44,82 @@ public class Main {
                 numDrivers += 1;
             }
             inputFile.close();
-            scanner.close();
-        }
-        // Case where input file not found
-        catch(FileNotFoundException e){
-            System.err.println("File not found: " + fileName);
-        }
 
-        //The code for the second input file
-        Scanner scannerTwo = new Scanner(System.in);
-        System.out.print("Enter file name: " );
-        String fileNameTwo = scanner.nextLine();
-        try {
-            Scanner inputFile = new Scanner(new File(fileNameTwo));
-            while(inputFile.hasNext()){
-                String commandString[] = getStringArray(inputFile.nextLine());
+            //Part 2, Executing instruction commands given by the user
+            System.out.print("Enter file name: " );
+            String fileNameTwo = scanner.nextLine();
+            Scanner commandInputFile = new Scanner(new File(fileNameTwo));
+            
+            //Iterate through each command
+            while (commandInputFile.hasNext()) {
+                String commandString[] = getStringArray(commandInputFile.nextLine());
+
+                //command for sorting
                 if (commandString[0] == "sort"){
-                    if(commandString.length != 3){
+
+                    //case where command isnt valid
+                    if(commandString.length != 3) {
                         continue;
                     }
-                    if(commandString[1] == "area"){
+
+                    //sorting criteria
+                    if (commandString[1] == "area") {
                         Driver.comparisonVar = "area";
-                        driverList.sort();
-                        if (commandString[2] == "asc"){
-                            Node<Driver> curr = driverList.getHead();
-                            while (curr !=  null){
-                                System.out.println(curr.getPayload().toString());
-                                curr = curr.getNext();
-                            }
-                        }
-                        else if(commandString[2] == "des"){
-                            Node<Driver> curr = driverList.getTail();
-                            while (curr !=  null){
-                                System.out.println(curr.getPayload().toString());
-                                curr = curr.getPrevious();
-                            }
-                        }
                     }
-                    else if(commandString[1] == "driver"){
+                    else if(commandString[1] == "driver") {
                         Driver.comparisonVar = "name";
-                        driverList.sort();
-                        if (commandString[2] == "asc"){
-                            Node<Driver> curr = driverList.getHead();
+                    }
+                    else{
+                        continue;
+                    }
+                    driverList.sort();
+
+                    //sorting direction
+                    if  (commandString[2] == "asc") {
+                        Node<Driver> curr = driverList.getHead();
                             while (curr !=  null){
                                 System.out.println(curr.getPayload().toString());
                                 curr = curr.getNext();
                             }
-                        }
-                        else if(commandString[2] == "des"){
-                            Node<Driver> curr = driverList.getTail();
-                            while (curr !=  null){
-                                System.out.println(curr.getPayload().toString());
-                                curr = curr.getPrevious();
-                            }
+                    }
+                    else if (commandString[2] == "des") {
+                        Node<Driver> curr = driverList.getTail();
+                        while (curr !=  null){
+                            System.out.println(curr.getPayload().toString());
+                            curr = curr.getPrevious();
                         }
                     }
-                    
+                    else {
+                        continue;
+                    }
                 }
-                else if(commandString[0].charAt(0) >= 65){
-                    //check for name
-                    String name = "";
-                    for (int i = 0; i < commandString.length; i += 1){
-                        name += commandString[i];
+
+                //command asking for a specifc area
+                else if (containsOnlyDigitsAndOnePeriod(commandString[0])) {
+                    double targetArea = Double.parseDouble(commandString[0]) ;
+                    Node<Driver> curr = driverList.getHead();
+                    while(curr !=  null){
+                        double currArea = curr.getPayload().getArea();
+                        if (currArea == targetArea){
+                            System.out.println(curr.getPayload().toString());
+                            break;
+                        }
+                        else{
+                            curr = curr.getNext();
+                        }
+                        System.out.println(targetArea + " not found");
+                        System.out.println();
                     }
+                }
+
+                //command asking for a name
+                else if (isAlphaNumericHyphenApostrophe(commandString[0])) {
+                    String targetName = commandString[0];
                     Node<Driver> curr = driverList.getHead();
                     while(curr !=  null){
                         Driver driver = curr.getPayload();
                         String currName = driver.getName();
-                        if (currName == name){
+                        if (currName == targetName){
                             System.out.println(curr.getPayload().toString());
                             System.out.println();
                             break;
@@ -115,38 +127,20 @@ public class Main {
                         else{
                             curr = curr.getNext();
                         }
-                        System.out.println(name + " not found");
+                        System.out.println(targetName + " not found");
                         System.out.println();
                     }
                 }
-                else{
-                   //search the number
-                   double area = Double.parseDouble(commandString[0]) ;
-                   Node<Driver> curr = driverList.getHead();
-                    while(curr !=  null){
-                        double currArea = curr.getPayload().getArea();
-                        if (currArea == area){
-                            System.out.println(curr.getPayload().toString());
-                            System.out.println();
-                            break;
-                        }
-                        else{
-                            curr = curr.getNext();
-                        }
-                        System.out.println(area + " not found");
-                        System.out.println();
-                    }
-    
-                }
-                System.out.println();
-            }
 
-            inputFile.close();
-            scanner.close();
+            }
         }
+        // Case where input file not found
         catch(FileNotFoundException e){
-            System.err.println("Second File not found: " + fileName);
+            System.err.println("File not found: " + fileName);
+
         }
+
+      
     }
 
     public static void addDriver(String inputString[], LinkedList<Driver> driverList){
@@ -192,6 +186,23 @@ public class Main {
     public static String[] getStringArray(String s){
         return s.split("[,\\s]");
     }
+    public static boolean isAlphaNumericHyphenApostrophe(String str) {
+        // Define a regular expression pattern that matches alphanumeric, hyphen, or apostrophe
+        Pattern pattern = Pattern.compile("^[a-zA-Z0-9\\-']+$");
+        Matcher matcher = pattern.matcher(str);
+
+        // Check if the entire string matches the pattern
+        return matcher.matches();
+    }
+    public static boolean containsOnlyDigitsAndOnePeriod(String str) {
+        // Define a regular expression pattern that matches only digits and at most one period
+        Pattern pattern = Pattern.compile("^[0-9]+(\\.[0-9]*)?$");
+        Matcher matcher = pattern.matcher(str);
+
+        // Check if the entire string matches the pattern
+        return matcher.matches();
+    }
+
 
 
 
