@@ -80,20 +80,35 @@ public class Main {
 
                     //sorting direction
                     if  (commandString[2].equals("asc")) {
-                        Node<Driver> curr = driverList.getHead();
-                        while (curr !=  null){
-                            System.out.println(curr.getPayload().toString());
-                            curr = curr.getNext();
-                        }
-                        System.out.println();
+                        // Node<Driver> curr = driverList.getHead();
+                        // while (curr !=  null){
+                        //     System.out.println(curr.getPayload().toString());
+                        //     curr = curr.getNext();
+                        // }
+                        // System.out.println();
+                        String driverListStringAsc = driverList.toString();
+                        System.out.println(driverListStringAsc);
                     }
                     else if (commandString[2].equals("des")) {
-                        Node<Driver> curr = driverList.getTail();
-                        while (curr !=  null){
-                            System.out.println(curr.getPayload().toString());
-                            curr = curr.getPrevious();
+                        // Node<Driver> curr = driverList.getTail();
+                        // while (curr !=  null){
+                        //     System.out.println(curr.getPayload().toString());
+                        //     curr = curr.getPrevious();
+                        // }
+                        // System.out.println();
+                        StringBuilder sb = new StringBuilder();
+                        Node<Driver> current = driverList.getHead();
+                        while (current != null) {
+                            sb.insert(0,current.getPayload().toString());
+                            if (current.getNext() != null){
+                                sb.insert(0,System.lineSeparator());
+                            }else{
+                                sb.append(System.lineSeparator());
+                            }
+                            current = current.getNext();
                         }
-                        System.out.println();
+                        System.out.println(sb.toString());
+                        
                     }
                     //invalid direction
                     else {

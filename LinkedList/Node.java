@@ -1,10 +1,10 @@
 package LinkedList;
 //Ben Rhee
 //bpr210000
-public class Node<T> implements Comparable<Node<T>> {
-    private T payload;
-    private Node<T> next;
-    private Node<T> previous;
+public class Node<T extends Comparable<T>>implements Comparable<Node<T>>  {
+    public T payload;
+    public Node<T> next;
+    public Node<T> previous;
 
     // Default constructor
     public Node(){
@@ -49,15 +49,7 @@ public class Node<T> implements Comparable<Node<T>> {
     // Implement compareTo method for Comparable
     @Override
     public int compareTo(Node<T> other) {
-        if (this.payload == null && other.payload == null) {
-            return 0;
-        } else if (this.payload == null) {
-            return -1;
-        } else if (other.payload == null) {
-            return 1;
-        } else {
-            return 0;
-        }
+        return this.payload.compareTo(other.getPayload());
     }
 
     @Override

@@ -59,6 +59,7 @@ public class LinkedList<T extends Comparable<T>> {
         }
         return sb.toString();
     }
+    
 
     /*
     This sort function is implemented using Insertion Sort
@@ -69,26 +70,42 @@ public class LinkedList<T extends Comparable<T>> {
 
      */
     public void sort() {
-        // Already sorted or empty list
         if (head == null || head.getNext() == null) {
-            return; 
+            return; // List is already sorted or empty
         }
-  
-        Node<T> current = head;
-        Node<T> next;
-  
-        while (current != null) {
-            next = current.getNext();
-            while (next != null) {
-                if (current.getPayload().compareTo(next.getPayload()) > 0) {
-                    // Swap payloads if necessary
-                    T temp = current.getPayload();
-                    current.setPayload(next.getPayload());
-                    next.setPayload(temp);
+
+        boolean swapped;
+        do {
+            swapped = false;
+            Node<T> current = head;
+            Node<T> previous = null;
+
+            while (current != null && current.getNext() != null) {
+                Node<T> nextNode = current.getNext();
+                if (current.getPayload().compareTo(nextNode.getPayload()) > 0) {
+                    if (previous != null) {
+                        if (previous == this.tail){
+                            this.tail = nextNode;
+                        }
+                        previous.setNext(nextNode);
+                    } else {
+                        head = nextNode;
+                    }
+
+                    current.setNext(nextNode.getNext());
+                    nextNode.setNext(current);
+
+                    if (current == this.tail) {
+                        this.tail = nextNode;
+                    }
+
+                    swapped = true;
                 }
-                next = next.getNext();
+
+                previous = current;
+                current = nextNode;
             }
-            current = current.getNext();
-        }
-  }
+        } while (swapped);
+    }
+
 }
