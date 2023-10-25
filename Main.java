@@ -46,8 +46,7 @@ public class Main {
     public static void main(String[] args){
 
         //intiializing Driver Linked List
-        LinkedList<Driver> driverList = new LinkedList();
-        int numDrivers = 0;
+        LinkedList<Driver> driverList = new LinkedList<>();
 
         // Requesting driver info from user
         Scanner scanner = new Scanner(System.in);
@@ -61,7 +60,6 @@ public class Main {
             while(inputFile.hasNext()){
                 String driverInputString[] = getStringArray(inputFile.nextLine());
                 addDriver(driverInputString, driverList);
-                numDrivers += 1;
             }
 
             //Pring the results from processing the drivers
@@ -170,6 +168,7 @@ public class Main {
             System.err.println("File not found: " + fileName);
 
         }
+        scanner.close();
 
 
     }
@@ -214,7 +213,7 @@ public class Main {
             driver.setArea(area);
     
             //Setting Node
-            Node<Driver> driverNode = new Node(driver);
+            Node<Driver> driverNode = new Node<>(driver);
             //Adding driver to Linked List
             driverList.add(driverNode);
             
