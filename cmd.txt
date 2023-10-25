@@ -1,3 +1,5 @@
 sort area asc
+sort area des
 Greedo
 10
+19

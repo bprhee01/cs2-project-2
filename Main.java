@@ -43,6 +43,8 @@ public class Main {
                 addDriver(driverInputString, driverList);
                 numDrivers += 1;
             }
+
+            //Pring the results from processing the drivers
             String driverListString = driverList.toString();
             System.out.println(driverListString);
             inputFile.close();
@@ -75,14 +77,15 @@ public class Main {
                         continue;
                     }
                     driverList.sort();
+
                     //sorting direction
                     if  (commandString[2].equals("asc")) {
                         Node<Driver> curr = driverList.getHead();
-                            while (curr !=  null){
-                                System.out.println(curr.getPayload().toString());
-                                curr = curr.getNext();
-                            }
-                            System.out.println();
+                        while (curr !=  null){
+                            System.out.println(curr.getPayload().toString());
+                            curr = curr.getNext();
+                        }
+                        System.out.println();
                     }
                     else if (commandString[2].equals("des")) {
                         Node<Driver> curr = driverList.getTail();
@@ -92,6 +95,7 @@ public class Main {
                         }
                         System.out.println();
                     }
+                    //invalid direction
                     else {
                         continue;
                     }
@@ -99,10 +103,10 @@ public class Main {
                 }
 
                 //command asking for a specifc area
-                else if (containsOnlyDigitsAndOnePeriod(commandString[0])) {
+                else if (isValidInteger(commandString[0])) {
                     double targetArea = Double.parseDouble(commandString[0]) ;
-                    Node<Driver> curr = driverList.getHead();
-                    while(curr !=  null){
+                    Node<Driver> curr = driverList.getHead().getNext();
+                    while(curr !=  null & curr != driverList.getTail()){
                         double currArea = curr.getPayload().getArea();
                         if (currArea == targetArea){
                             System.out.println(curr.getPayload().toString());
@@ -119,8 +123,8 @@ public class Main {
                 //command asking for a name
                 else if (isAlphaNumericHyphenApostrophe(commandString[0])) {
                     String targetName = commandString[0];
-                    Node<Driver> curr = driverList.getHead();
-                    while(curr !=  null){
+                    Node<Driver> curr = driverList.getHead().getNext();
+                    while(curr !=  null & curr != driverList.getTail()){
                         Driver driver = curr.getPayload();
                         String currName = driver.getName();
                         if (currName.equals(targetName)){
@@ -148,40 +152,52 @@ public class Main {
     }
 
     public static void addDriver(String inputString[], LinkedList<Driver> driverList){
-        int firstCoordIdx = 0;
-        String name = "";
-        int numCoords = 0;
-        while (inputString[firstCoordIdx].charAt(0) >= 65){
-            name += inputString[firstCoordIdx];
-            firstCoordIdx += 1;
-        }
-        //setting area
-        double area = 0.0;
-        double firstX = Double.parseDouble(inputString[firstCoordIdx]);
-        double firstY = Double.parseDouble(inputString[firstCoordIdx+1]);
-        double prevX = firstX;
-        double prevY = firstY;
-        for(int i = firstCoordIdx+2; i < inputString.length; i += 2){
-            double x = Double.parseDouble(inputString[i]);
-            double y  = Double.parseDouble(inputString[i + 1]);
-            area += ((prevX +x)) * (y - prevY);
-            prevX = x;
-            prevY = y;
+        try {
+            // Construct the name of the driver and set the index of the first coordinate
+            int firstCoordIdx = 0;
+            String name = "";
+            while (isAlphaNumericHyphenApostrophe(inputString[firstCoordIdx]) & firstCoordIdx < inputString.length){
+                name += inputString[firstCoordIdx];
+                firstCoordIdx += 1;
+            }
+    
+            if(firstCoordIdx+1 >= inputString.length){
+                return;
+            }
+    
+            //setting area
+            double area = 0.0;
+            int firstX = Integer.parseInt(inputString[firstCoordIdx]);
+            int firstY = Integer.parseInt(inputString[firstCoordIdx+1]);
+            int prevX = firstX;
+            int prevY = firstY;
+            for(int i = firstCoordIdx+2; i < inputString.length; i += 2){
+                int x = Integer.parseInt(inputString[i]);
+                int y  = Integer.parseInt(inputString[i + 1]);
+                area += ((prevX +x)) * (y - prevY);
+                prevX = x;
+                prevY = y;
+    
+            }
+            area = Math.abs(area) / 2;
 
+            //if the first and last coordinates dont match, this row is invalid
+            if (firstX != prevX || firstY != prevY){
+              return;
+            }
+    
+            //setting driver
+            Driver driver = new Driver(name);
+            driver.setArea(area);
+    
+            //Setting Node
+            Node<Driver> driverNode = new Node(driver);
+            //Adding driver to Linked List
+            driverList.add(driverNode);
+            
+        } catch (NumberFormatException e) {
+            return; // Parsing failed, not a valid integer
         }
-        area = Math.abs(area) / 2;
-        if (firstX != prevX || firstY != prevY){
-          return;
-        }
-
-        //setting driver
-        Driver driver = new Driver(name);
-        driver.setArea(area);
-
-        //Setting Node
-        Node<Driver> driverNode = new Node(driver);
-        //Adding driver to Linked List
-        driverList.add(driverNode);
 
     }
 
@@ -191,19 +207,20 @@ public class Main {
     }
     public static boolean isAlphaNumericHyphenApostrophe(String str) {
         // Define a regular expression pattern that matches alphanumeric, hyphen, or apostrophe
-        Pattern pattern = Pattern.compile("^[a-zA-Z0-9\\-']+$");
+        Pattern pattern = Pattern.compile("^[a-zA-Z\\-']+$");
         Matcher matcher = pattern.matcher(str);
 
         // Check if the entire string matches the pattern
         return matcher.matches();
     }
-    public static boolean containsOnlyDigitsAndOnePeriod(String str) {
-        // Define a regular expression pattern that matches only digits and at most one period
-        Pattern pattern = Pattern.compile("^[0-9]+(\\.[0-9]*)?$");
-        Matcher matcher = pattern.matcher(str);
-
-        // Check if the entire string matches the pattern
-        return matcher.matches();
+    public static boolean isValidInteger(String str) {
+        try {
+            // Attempt to parse the string as an integer
+            Integer.parseInt(str);
+            return true; // If successful, it's a valid integer
+        } catch (NumberFormatException e) {
+            return false; // Parsing failed, not a valid integer
+        }
     }
 
 
