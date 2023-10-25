@@ -3,13 +3,33 @@
 
 /*
  * The main function first handles obtaining an input file containing driver info
- * if not found, main throw an exception
- * If found, the function while iterativelt add drivers to a linked list as well as calculate area
+ * if not found, main throws an exception
+ * If found, the function while iterate through the files and add drivers to a linked list as well as calculate area
  * Once completeted, main will print out every driver
  * 
- * The next part of main will obtain an input file containing cmd info
+ * The next part of main will obtain an input file containing command info
  * If not found, main will throw an exception
  * If found, main will handle each case
+ * CASES
+ *sort by (area/name) in (ascending/descending order) 
+ *find driver by name
+ *find driver by area
+ * 
+ * OTHER FUNCTIONS MADE
+ * addDriver(String inputString[], LinkedList<Driver> driverList) => void
+ *  This function will parse the input string, first find the name of the driver
+ *  Next, the function will calculate area based on the given formula. 
+ *  If the first and last coordinate don't match, the function will exit and the driver wont be added
+ *  A new node is now created with the Driver as the payload. 
+ *  The node is now added to the LinkedList
+ * 
+ * getStringArray(String s) => string array
+ *  This function will parse through the input line given from the file, and remove any characters that are unnecessary, 
+ *      as well seperate inputs within each line
+ * isAlphaNumericHyphenApostrophe(String str) => boolean
+ *  Returns true if the input string only contains alphanumneric values, hypehens, and apostrophes (REGES expression)
+ * isValidInteger(String str) => boolean
+ *  Returns true if the input string is a valid integer (REGEX expression)
  */
 
 import java.io.*;
@@ -80,22 +100,10 @@ public class Main {
 
                     //sorting direction
                     if  (commandString[2].equals("asc")) {
-                        // Node<Driver> curr = driverList.getHead();
-                        // while (curr !=  null){
-                        //     System.out.println(curr.getPayload().toString());
-                        //     curr = curr.getNext();
-                        // }
-                        // System.out.println();
                         String driverListStringAsc = driverList.toString();
                         System.out.println(driverListStringAsc);
                     }
                     else if (commandString[2].equals("des")) {
-                        // Node<Driver> curr = driverList.getTail();
-                        // while (curr !=  null){
-                        //     System.out.println(curr.getPayload().toString());
-                        //     curr = curr.getPrevious();
-                        // }
-                        // System.out.println();
                         StringBuilder sb = new StringBuilder();
                         Node<Driver> current = driverList.getHead();
                         while (current != null) {

@@ -2,6 +2,13 @@ package LinkedList;
 //Ben Rhee
 //bpr210000
 
+ /*
+    This sort function is implemented using Insertion Sort
+    Iterate over the array and compare the current element (key) to its predecessor.
+    If the key element is smaller than its predecessor, compare it to the elements before. 
+    Move the greater elements one position up to make space for the swapped element.
+    
+     */
 public class LinkedList<T extends Comparable<T>> {
     private Node<T> head;
     private Node<T> tail;
@@ -106,6 +113,14 @@ public class LinkedList<T extends Comparable<T>> {
                 current = nextNode;
             }
         } while (swapped);
+
+        Node<T> curr = this.head;
+        while(curr != null){
+            if (curr.getNext() == null){
+                this.tail = curr;
+            }
+            curr = curr.getNext();
+        }
     }
 
 }
